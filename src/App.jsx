@@ -35,21 +35,29 @@ function useSearch () {
 
 
 function App() {
+  const [sort, setSort] = useState(false)
+  
   const { search, updateSearch, error } = useSearch()
-  const { movies, getMovies } = useMovies({ search })
+  const { movies, getMovies } = useMovies({ search, sort })
  
   
   const handleSubmit = (event) => {
     event.preventDefault()
-    getMovies()
+    getMovies({ search })
 
+  }
+
+  const handleSort = () => {
+    setSort(!sort)
   }
 
   const handleChange = (event) => {
     return updateSearch(event.target.value)
   }
   
-  
+  useEffect(() => {
+    console.log('new getMovies recevid')
+  }, [getMovies])
   
   return (
     <div className='page'>
@@ -57,7 +65,7 @@ function App() {
         <div>
           <h1>Buscador de Peliculas</h1>
           <form className='form' onSubmit={handleSubmit}>
-            <input onChange={handleChange} value={search} name='search' placeholder='Busque su Pelicula'/>
+            <input onChange={handleChange} value={search} name='search' placeholder='Busque su Pelicula'/><input type='checkbox' onChange={handleSort} checked={sort} />
             <button type='submit'>Buscar</button>
 
            </form>
